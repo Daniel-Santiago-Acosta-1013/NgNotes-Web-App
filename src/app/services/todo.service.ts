@@ -25,6 +25,14 @@ export class TodoService {
         this.saveToStorage();
     }
 
+    updateTitle(id: number, newTitle: string) {
+        const todo = this.todos.find(todo => todo.id === id);
+        if (todo) {
+            todo.title = newTitle;
+            this.saveToStorage();
+        }
+    }
+
     toggleCompletion(id: number) {
         const todo = this.todos.find(todo => todo.id === id);
         if (todo) {

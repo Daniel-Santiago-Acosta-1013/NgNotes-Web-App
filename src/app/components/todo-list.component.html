@@ -10,7 +10,15 @@
 <!-- List of tasks -->
 <ul>
     <li *ngFor="let todo of todos">
-        <span [class.completed]="todo.isComplete" (click)="toggleCompletion(todo.id)">{{todo.title}}</span>
-        <button (click)="deleteTodo(todo.id)">Delete</button>
+        <ng-container *ngIf="editingTodoId !== todo.id; else editingTemplate">
+            <span [class.completed]="todo.isComplete" (click)="toggleCompletion(todo.id)">{{todo.title}}</span>
+            <div class="buttons-container">
+                <button (click)="startEditing(todo.id)">Edit</button>
+                <button (click)="deleteTodo(todo.id)">Delete</button>
+            </div>
+        </ng-container>
+        <ng-template #editingTemplate>
+            <input [(ngModel)]="todo.title" (blur)="finishEditing(todo.id, todo.title)" />
+        </ng-template>
     </li>
 </ul>

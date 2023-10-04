@@ -17,7 +17,11 @@
             </div>
         </ng-container>
         <ng-template #editingTemplate>
-            <input [(ngModel)]="todo.title" (blur)="finishEditing(todo.id, todo.title)" />
+            <input [(ngModel)]="todo.title" />
+            <div class="editing-buttons">
+                <button (click)="finishEditing(todo.id, todo.title)">✅</button>
+                <button (click)="cancelEditing()">❌</button>
+            </div>
         </ng-template>
     </li>
 </ul>

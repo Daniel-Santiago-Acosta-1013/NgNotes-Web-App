@@ -37,11 +37,15 @@ export class TodoListComponent implements OnInit {
     this.editingTodoId = id;
   }
 
+  cancelEditing() {
+    this.editingTodoId = null;
+  }
+
   finishEditing(id: number, newTitle: string) {
     if (newTitle.trim() !== "") {
-        this.todoService.updateTitle(id, newTitle);
-        this.editingTodoId = null;  // Terminar edición
-        this.todos = this.todoService.getAll();  // Refrescar lista
+      this.todoService.updateTitle(id, newTitle);
+      this.editingTodoId = null;  // Terminar edición
+      this.todos = this.todoService.getAll();  // Refrescar lista
     }
   }
 

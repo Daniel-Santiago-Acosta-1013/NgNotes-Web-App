@@ -17,6 +17,7 @@
     <li *ngFor="let todo of todos" class="card" [class.due-soon]="isDueSoon(todo)" [class.overdue]="isOverdue(todo)">
         <ng-container *ngIf="editingTodoId !== todo.id; else editingTemplate">
             <span class="todo-name" [class.completed]="todo.isComplete" (click)="toggleCompletion(todo.id)">{{todo.title}}</span>
+            <span class="todo-due-date">{{ formatDueDate(todo.dueDate) }}</span>
             <div class="buttons-container">
                 <button (click)="startEditing(todo.id)">✏️</button>
                 <button (click)="deleteTodo(todo.id)">❌</button>

@@ -69,7 +69,7 @@ ul {
     li.card.due-soon {
         background-color: #ffeeba;
     }
-    
+
     li.card.overdue {
         background-color: #f8d7da;
     }
@@ -98,6 +98,26 @@ ul {
             display: flex;
             gap: 10px;
         }
+
+        flex-direction: column;
+        /* Cambio la dirección del flex a columna */
+
+        .todo-name,
+        .todo-due-date {
+            width: 100%;
+            /* Aseguro que el título y la fecha ocupen todo el ancho */
+            text-align: left;
+            margin: 5px 0;
+        }
+
+        .buttons-container {
+            /* ... (propiedades existentes) ... */
+            justify-content: space-between;
+            /* Alineo los botones horizontalmente */
+            width: 100%;
+            /* Aseguro que los botones ocupen todo el ancho */
+            margin-top: 10px;
+        }
     }
 }
 
@@ -110,6 +130,13 @@ ul {
     gap: 10px;
 }
 
+.todo-due-date {
+    display: block;
+    font-size: 0.9em;
+    color: #888;
+    margin: 5px 0;
+}
+
 @media (max-width: 600px) {
     :host {
         padding: 10px;
@@ -117,5 +144,19 @@ ul {
 
     input {
         width: 65%;
+    }
+
+    input, select {
+        width: 100%; /* Los inputs y selects ocuparán todo el ancho en pantallas pequeñas */
+        margin-bottom: 10px;
+        margin-right: 0; /* Elimino el margen derecho */
+    }
+
+    button {
+        padding: 8px; /* Reduzco el padding de los botones */
+    }
+
+    .buttons-container {
+        gap: 5px; /* Reduzco el espacio entre botones */
     }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../models/todo.model';
 import { TodoService } from '../services/todo.service';
+import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -46,6 +47,10 @@ export class TodoListComponent implements OnInit {
       this.newTodoPriority = 'medium';
       this.newTodoDueDate = '';
     }
+  }
+
+  formatDueDate(date: Date): string {
+    return formatDate(date, 'MMM d, y, h:mm a', 'en-US');
   }
 
   isDueSoon(todo: Todo): boolean {

@@ -67,6 +67,10 @@ ul {
     }
 }
 
+.todo-name {
+    cursor: pointer;
+}
+
 @media (max-width: 600px) {
     :host {
         padding: 10px;

@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',  // Actualiza esta línea
-  styleUrls: ['./app.component.scss']    // Actualiza esta línea
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angular-To-Do-List';
+  title = 'NgNotes';
 }

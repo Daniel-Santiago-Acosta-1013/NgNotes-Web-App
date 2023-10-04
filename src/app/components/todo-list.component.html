@@ -1,20 +1,19 @@
-
 <h2>To-Do List</h2>
 
 <!-- Form to add a new task -->
 <div class="todo-form">
     <input [(ngModel)]="newTodoTitle" placeholder="Add a new task..." />
-    <button (click)="addTodo()">Add</button>
+    <button (click)="addTodo()">➕</button>
 </div>
 
 <!-- List of tasks -->
 <ul>
-    <li *ngFor="let todo of todos">
+    <li *ngFor="let todo of todos" class="card">
         <ng-container *ngIf="editingTodoId !== todo.id; else editingTemplate">
             <span [class.completed]="todo.isComplete" (click)="toggleCompletion(todo.id)">{{todo.title}}</span>
             <div class="buttons-container">
-                <button (click)="startEditing(todo.id)">Edit</button>
-                <button (click)="deleteTodo(todo.id)">Delete</button>
+                <button (click)="startEditing(todo.id)">✏️</button>
+                <button (click)="deleteTodo(todo.id)">❌</button>
             </div>
         </ng-container>
         <ng-template #editingTemplate>

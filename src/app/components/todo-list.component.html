@@ -3,12 +3,18 @@
 <!-- Form to add a new task -->
 <div class="todo-form">
     <input [(ngModel)]="newTodoTitle" placeholder="Add a new task..." />
+    <select [(ngModel)]="newTodoPriority">
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+    </select>
+    <input [(ngModel)]="newTodoDueDate" type="datetime-local" />
     <button (click)="addTodo()">➕</button>
 </div>
 
 <!-- List of tasks -->
 <ul>
-    <li *ngFor="let todo of todos" class="card">
+    <li *ngFor="let todo of todos" class="card" [class.due-soon]="isDueSoon(todo)" [class.overdue]="isOverdue(todo)">
         <ng-container *ngIf="editingTodoId !== todo.id; else editingTemplate">
             <span class="todo-name" [class.completed]="todo.isComplete" (click)="toggleCompletion(todo.id)">{{todo.title}}</span>
             <div class="buttons-container">

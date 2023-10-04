@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../models/todo.model';
 import { TodoService } from '../services/todo.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-todo-list',
@@ -12,6 +13,8 @@ export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
   newTodoTitle: string = "";
   editingTodoId: number | null = null;
+  newTodoPriority: 'high' | 'medium' | 'low' = 'medium';
+  newTodoDueDate: string = '';
 
   constructor(private todoService: TodoService) { }
 
@@ -20,12 +23,41 @@ export class TodoListComponent implements OnInit {
   }
 
   addTodo() {
-    if (this.newTodoTitle.trim() !== "") {
-      const newTodo = new Todo(Date.now(), this.newTodoTitle, false);
-      this.todoService.add(newTodo);
-      this.todos = this.todoService.getAll();  // Refresh list
-      this.newTodoTitle = "";  // Reset input
+    if (!this.newTodoDueDate) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Please select a due date for the task.'
+      });
+      return;
     }
+
+    if (this.newTodoTitle.trim() !== "") {
+      const newTodo = new Todo(
+        Date.now(),
+        this.newTodoTitle,
+        false,
+        this.newTodoPriority,
+        new Date(this.newTodoDueDate)
+      );
+      this.todoService.add(newTodo);
+      this.todos = this.todoService.getAll();
+      this.newTodoTitle = "";
+      this.newTodoPriority = 'medium';
+      this.newTodoDueDate = '';
+    }
+  }
+
+  isDueSoon(todo: Todo): boolean {
+    const now = new Date();
+    const oneDay = 24 * 60 * 60 * 1000;
+    const dueDate = new Date(todo.dueDate);
+    return (dueDate.getTime() - now.getTime()) <= oneDay && (dueDate.getTime() - now.getTime()) > 0;
+  }
+
+  isOverdue(todo: Todo): boolean {
+    const now = new Date();
+    return now > todo.dueDate;
   }
 
   deleteTodo(id: number) {

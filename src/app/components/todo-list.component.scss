@@ -6,6 +6,7 @@
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     background-color: #fff;
+    font-family: 'Roboto', sans-serif;
 }
 
 input {
@@ -14,6 +15,31 @@ input {
     border-radius: 10px;
     border: 1px solid #d1d1d1;
     margin-right: 10px;
+    outline: none;
+    transition: border 0.3s;
+
+    &:focus {
+        border-color: #007bff;
+    }
+}
+
+select {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #d1d1d1;
+    margin: 5px 10px;
+    outline: none;
+    transition: border 0.3s;
+
+    &:focus {
+        border-color: #007bff;
+    }
+}
+
+input[type="datetime-local"] {
+    border-radius: 10px;
+    border: 1px solid #d1d1d1;
+    margin: 5px 0px;
     outline: none;
     transition: border 0.3s;
 
@@ -39,6 +65,14 @@ button {
 ul {
     list-style-type: none;
     padding: 0;
+
+    li.card.due-soon {
+        background-color: #ffeeba;
+    }
+    
+    li.card.overdue {
+        background-color: #f8d7da;
+    }
 
     li.card {
         padding: 15px;

@@ -3,13 +3,13 @@
 <!-- Form to add a new task -->
 <div class="todo-form">
     <input [(ngModel)]="newTodoTitle" placeholder="Add a new task..." />
+    <input [(ngModel)]="newTodoDueDate" type="datetime-local" />
+    <button (click)="addTodo()">➕</button>
     <select [(ngModel)]="newTodoPriority">
         <option value="high">High</option>
         <option value="medium">Medium</option>
         <option value="low">Low</option>
     </select>
-    <input [(ngModel)]="newTodoDueDate" type="datetime-local" />
-    <button (click)="addTodo()">➕</button>
 </div>
 
 <!-- List of tasks -->

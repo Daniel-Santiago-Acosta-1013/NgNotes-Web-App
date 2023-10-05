@@ -28,6 +28,7 @@ select {
     border-radius: 10px;
     border: 1px solid #d1d1d1;
     margin: 5px 0px;
+    margin-right: 10px;
     outline: none;
     transition: border 0.3s;
 
@@ -135,6 +136,13 @@ ul {
     font-size: 0.9em;
     color: #888;
     margin: 5px 0;
+}
+
+.category-filter {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 @media (max-width: 600px) {

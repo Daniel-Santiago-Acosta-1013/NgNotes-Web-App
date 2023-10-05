@@ -16,6 +16,8 @@ export class TodoListComponent implements OnInit {
   editingTodoId: number | null = null;
   newTodoPriority: 'high' | 'medium' | 'low' = 'medium';
   newTodoDueDate: string = '';
+  newTodoCategory: string = 'Trabajo';
+  selectedCategory: string = 'all';
 
   constructor(private todoService: TodoService) { }
 
@@ -39,13 +41,22 @@ export class TodoListComponent implements OnInit {
         this.newTodoTitle,
         false,
         this.newTodoPriority,
-        new Date(this.newTodoDueDate)
+        new Date(this.newTodoDueDate),
+        this.newTodoCategory
       );
       this.todoService.add(newTodo);
       this.todos = this.todoService.getAll();
       this.newTodoTitle = "";
       this.newTodoPriority = 'medium';
       this.newTodoDueDate = '';
+    }
+  }
+
+  filterByCategory() {
+    if (this.selectedCategory === 'all') {
+      this.todos = this.todoService.getAll();
+    } else {
+      this.todos = this.todoService.getByCategory(this.selectedCategory);
     }
   }
 

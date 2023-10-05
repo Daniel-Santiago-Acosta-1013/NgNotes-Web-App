@@ -10,6 +10,22 @@
         <option value="medium">Medium</option>
         <option value="low">Low</option>
     </select>
+    <select [(ngModel)]="newTodoCategory">
+        <option value="Trabajo">Trabajo</option>
+        <option value="Hogar">Hogar</option>
+        <option value="Estudios">Estudios</option>
+    </select>
+</div>
+
+<!-- Filtro para ver tareas por categoría -->
+<div class="category-filter">
+    <label for="categoryFilter">Filter by Category: </label>
+    <select id="categoryFilter" [(ngModel)]="selectedCategory" (change)="filterByCategory()">
+        <option value="all">All</option>
+        <option value="Trabajo">Trabajo</option>
+        <option value="Hogar">Hogar</option>
+        <option value="Estudios">Estudios</option>
+    </select>
 </div>
 
 <!-- List of tasks -->

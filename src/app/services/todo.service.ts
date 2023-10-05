@@ -41,6 +41,10 @@ export class TodoService {
         }
     }
 
+    getByCategory(category: string): Todo[] {
+        return this.todos.filter(todo => todo.category === category);
+    }
+
     private loadFromStorage() {
         const storedTodos = localStorage.getItem('todos');
         if (storedTodos) {

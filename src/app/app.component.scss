@@ -1,7 +1,56 @@
-* {
-    font-family: 'Roboto', sans-serif;
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
 }
 
-h1 {
-    text-align: center;
+.app-header {
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-8) 0 var(--space-6);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-info), var(--color-success));
+  }
+}
+
+[data-theme="dark"] .app-header {
+  background: var(--color-surface);
+  border-bottom-color: var(--color-border);
+}
+
+.app-title {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin-bottom: var(--space-2);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-info));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+
+.app-subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+  font-weight: var(--font-normal);
+  margin: 0;
+}
+
+.app-main {
+  padding: var(--space-8) 0;
+  
+  @media (max-width: 768px) {
+    padding: var(--space-6) 0;
+  }
 }

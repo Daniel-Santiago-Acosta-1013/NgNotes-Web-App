@@ -1,28 +1,79 @@
-# NgNotes-Web-App
+# NgNotes Web Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.1.
+A modern web application for managing notes and tasks, built with Angular 20 and TypeScript.
 
-## Development server
+## Prerequisites
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Node.js (version 18 or higher)
+- npm (Node Package Manager)
+- Angular CLI
 
-## Code scaffolding
+## Installation
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd NgNotes-Web-App
+```
 
-## Build
+2. Install dependencies
+```bash
+npm install
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Development
 
-## Running unit tests
+To start the development server:
+```bash
+ng serve
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Or alternatively:
+```bash
+npm start
+```
 
-## Running end-to-end tests
+Navigate to `http://localhost:4200/` in your browser. The application will automatically reload when you make changes to the source files.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Building
 
-## Further help
+To build the project for production:
+```bash
+npm run build
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# angular-To-Do-List
+The build artifacts will be stored in the `dist/` directory.
+
+## Testing
+
+To run unit tests:
+```bash
+npm test
+```
+
+## Project Structure
+
+This project follows Angular best practices and includes:
+- Component-based architecture
+- Reactive forms
+- TypeScript for type safety
+- Responsive design
+
+## Technologies Used
+
+- Angular 20
+- TypeScript 5.8
+- RxJS
+- SweetAlert2
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and ensure they pass
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.

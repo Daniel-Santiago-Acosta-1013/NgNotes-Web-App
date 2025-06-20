@@ -7,17 +7,22 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.scss']
+  styleUrls: ['./todo-list.component.scss'],
+  standalone: false
 })
 export class TodoListComponent implements OnInit {
 
   todos: Todo[] = [];
-  newTodoTitle: string = "";
   editingTodoId: number | null = null;
-  newTodoPriority: 'high' | 'medium' | 'low' = 'medium';
-  newTodoDueDate: string = '';
-  newTodoCategory: string = 'Trabajo';
   selectedCategory: string = 'all';
+  isAddModalOpen = false;
+
+  categories = [
+    { value: 'all', label: 'All Tasks', color: '#6366f1' },
+    { value: 'Trabajo', label: 'Work', color: '#3b82f6' },
+    { value: 'Hogar', label: 'Home', color: '#10b981' },
+    { value: 'Estudios', label: 'Studies', color: '#f59e0b' }
+  ];
 
   constructor(private todoService: TodoService) { }
 
@@ -25,31 +30,28 @@ export class TodoListComponent implements OnInit {
     this.todos = this.todoService.getAll();
   }
 
-  addTodo() {
-    if (!this.newTodoDueDate) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Oops...',
-        text: 'Please select a due date for the task.'
-      });
-      return;
-    }
+  openAddTaskModal() {
+    this.isAddModalOpen = true;
+  }
 
-    if (this.newTodoTitle.trim() !== "") {
-      const newTodo = new Todo(
-        Date.now(),
-        this.newTodoTitle,
-        false,
-        this.newTodoPriority,
-        new Date(this.newTodoDueDate),
-        this.newTodoCategory
-      );
-      this.todoService.add(newTodo);
-      this.todos = this.todoService.getAll();
-      this.newTodoTitle = "";
-      this.newTodoPriority = 'medium';
-      this.newTodoDueDate = '';
-    }
+  closeAddTaskModal() {
+    this.isAddModalOpen = false;
+  }
+
+  onTaskCreated(todo: Todo) {
+    this.todoService.add(todo);
+    this.todos = this.todoService.getAll();
+    
+    // Show success feedback
+    Swal.fire({
+      icon: 'success',
+      title: 'Task Created!',
+      text: `"${todo.title}" has been added to your tasks.`,
+      timer: 2000,
+      showConfirmButton: false,
+      toast: true,
+      position: 'top-end'
+    });
   }
 
   filterByCategory() {
@@ -58,6 +60,29 @@ export class TodoListComponent implements OnInit {
     } else {
       this.todos = this.todoService.getByCategory(this.selectedCategory);
     }
+  }
+
+  setFilter(category: string) {
+    this.selectedCategory = category;
+    this.filterByCategory();
+  }
+
+  getCategoryLabel(value: string): string {
+    const category = this.categories.find(cat => cat.value === value);
+    return category ? category.label : value;
+  }
+
+  getPriorityLabel(priority: string): string {
+    const labels: {[key: string]: string} = {
+      'high': 'High',
+      'medium': 'Medium', 
+      'low': 'Low'
+    };
+    return labels[priority] || priority;
+  }
+
+  trackByTodo(index: number, todo: Todo): number {
+    return todo.id;
   }
 
   formatDueDate(date: Date): string {
@@ -77,12 +102,46 @@ export class TodoListComponent implements OnInit {
   }
 
   deleteTodo(id: number) {
-    this.todoService.delete(id);
-    this.todos = this.todoService.getAll();  // Refresh list
+    const todo = this.todos.find(t => t.id === id);
+    if (!todo) return;
+
+    Swal.fire({
+      title: 'Delete Task?',
+      text: `Are you sure you want to delete "${todo.title}"? This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.todoService.delete(id);
+        this.todos = this.todoService.getAll();
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'Task has been deleted.',
+          timer: 2000,
+          showConfirmButton: false,
+          toast: true,
+          position: 'top-end'
+        });
+      }
+    });
   }
 
   startEditing(id: number) {
     this.editingTodoId = id;
+    // Focus the input after the view updates
+    setTimeout(() => {
+      const input = document.querySelector('.edit-input') as HTMLInputElement;
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    }, 0);
   }
 
   cancelEditing() {
@@ -91,9 +150,29 @@ export class TodoListComponent implements OnInit {
 
   finishEditing(id: number, newTitle: string) {
     if (newTitle.trim() !== "") {
-      this.todoService.updateTitle(id, newTitle);
-      this.editingTodoId = null;  // Terminar edición
-      this.todos = this.todoService.getAll();  // Refrescar lista
+      this.todoService.updateTitle(id, newTitle.trim());
+      this.editingTodoId = null;
+      this.todos = this.todoService.getAll();
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Updated!',
+        text: 'Task has been updated.',
+        timer: 1500,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end'
+      });
+    }
+  }
+
+  onEditKeydown(event: KeyboardEvent, id: number, title: string) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.finishEditing(id, title);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      this.cancelEditing();
     }
   }
 

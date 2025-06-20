@@ -1,0 +1,214 @@
+/* Add Task Modal Styles */
+.add-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  
+  svg {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+  
+  &.required::after {
+    content: '*';
+    color: var(--color-danger);
+    margin-left: var(--space-1);
+  }
+}
+
+.form-input {
+  width: 100%;
+  font-size: var(--text-base);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  color: var(--color-text-primary);
+  transition: all var(--transition-fast);
+  
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+    outline: none;
+  }
+  
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+  
+  &:invalid:not(:focus) {
+    border-color: var(--color-danger);
+  }
+}
+
+[data-theme="dark"] .form-input {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.input-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+/* Selection Grid */
+.selection-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+.selection-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  
+  &:hover {
+    border-color: var(--color-gray-300);
+    background-color: var(--color-gray-50);
+    transform: translateY(-1px);
+  }
+  
+  &.selected {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary-light);
+    
+    .selection-title {
+      color: var(--color-primary);
+      font-weight: var(--font-semibold);
+    }
+  }
+}
+
+[data-theme="dark"] .selection-item {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  
+  &:hover {
+    border-color: var(--color-gray-600);
+    background-color: var(--color-gray-700);
+  }
+  
+  &.selected {
+    background-color: rgba(99, 102, 241, 0.1);
+  }
+}
+
+.selection-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  color: var(--color-white);
+  flex-shrink: 0;
+  
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+  }
+}
+
+.priority-icon {
+  font-size: var(--text-base);
+}
+
+.selection-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.selection-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+  line-height: var(--leading-tight);
+}
+
+.selection-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-normal);
+}
+
+.selection-check {
+  color: var(--color-primary);
+  flex-shrink: 0;
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-light);
+  margin-top: var(--space-2);
+}
+
+[data-theme="dark"] .form-actions {
+  border-top-color: var(--color-border);
+}
+
+.form-actions button {
+  min-width: 120px;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .selection-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .selection-item {
+    padding: var(--space-3);
+    gap: var(--space-3);
+  }
+  
+  .selection-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: var(--space-2);
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+}

@@ -45,10 +45,21 @@ export class TodoService {
         return this.todos.filter(todo => todo.category === category);
     }
 
+    update(updatedTodo: Todo) {
+        const index = this.todos.findIndex(todo => todo.id === updatedTodo.id);
+        if (index !== -1) {
+            this.todos[index] = updatedTodo;
+            this.saveToStorage();
+        }
+    }
+
     private loadFromStorage() {
         const storedTodos = localStorage.getItem('todos');
         if (storedTodos) {
-            this.todos = JSON.parse(storedTodos);
+            this.todos = JSON.parse(storedTodos).map((todo: any) => ({
+                ...todo,
+                dueDate: new Date(todo.dueDate) // Ensure dueDate is a Date object
+            }));
         }
     }
 

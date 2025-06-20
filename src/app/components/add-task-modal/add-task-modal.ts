@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit, OnChanges } from '@angular/core';
 import { Todo } from '../../models/todo.model';
 
 @Component({
@@ -7,10 +7,12 @@ import { Todo } from '../../models/todo.model';
   styleUrl: './add-task-modal.scss',
   standalone: false
 })
-export class AddTaskModalComponent {
+export class AddTaskModalComponent implements OnInit, OnChanges {
   @Input() isOpen = false;
+  @Input() editingTodo: Todo | null = null;
   @Output() closeModal = new EventEmitter<void>();
   @Output() taskCreated = new EventEmitter<Todo>();
+  @Output() taskUpdated = new EventEmitter<Todo>();
 
   newTodoTitle: string = "";
   newTodoPriority: 'high' | 'medium' | 'low' = 'medium';
@@ -29,6 +31,20 @@ export class AddTaskModalComponent {
     { value: 'low', label: 'Low Priority', color: '#10b981', description: 'Nice to have' }
   ];
 
+  ngOnInit() {
+    if (this.editingTodo) {
+      this.loadTodoData();
+    }
+  }
+
+  ngOnChanges() {
+    if (this.editingTodo && this.isOpen) {
+      this.loadTodoData();
+    } else if (!this.editingTodo && this.isOpen) {
+      this.resetForm();
+    }
+  }
+
   close() {
     this.resetForm();
     this.closeModal.emit();
@@ -39,16 +55,30 @@ export class AddTaskModalComponent {
       return;
     }
 
-    const newTodo = new Todo(
-      Date.now(),
-      this.newTodoTitle.trim(),
-      false,
-      this.newTodoPriority,
-      new Date(this.newTodoDueDate),
-      this.newTodoCategory
-    );
-
-    this.taskCreated.emit(newTodo);
+    if (this.editingTodo) {
+      // Update existing todo
+      const updatedTodo = new Todo(
+        this.editingTodo.id,
+        this.newTodoTitle.trim(),
+        this.editingTodo.isComplete,
+        this.newTodoPriority,
+        new Date(this.newTodoDueDate),
+        this.newTodoCategory
+      );
+      this.taskUpdated.emit(updatedTodo);
+    } else {
+      // Create new todo
+      const newTodo = new Todo(
+        Date.now(),
+        this.newTodoTitle.trim(),
+        false,
+        this.newTodoPriority,
+        new Date(this.newTodoDueDate),
+        this.newTodoCategory
+      );
+      this.taskCreated.emit(newTodo);
+    }
+    
     this.close();
   }
 
@@ -73,5 +103,40 @@ export class AddTaskModalComponent {
 
   getPriorityData(value: string) {
     return this.priorities.find(pri => pri.value === value);
+  }
+
+  private loadTodoData() {
+    if (this.editingTodo) {
+      this.newTodoTitle = this.editingTodo.title;
+      this.newTodoPriority = this.editingTodo.priority;
+      this.newTodoCategory = this.editingTodo.category;
+      this.newTodoDueDate = this.formatDateForInput(this.editingTodo.dueDate);
+    }
+  }
+
+  private formatDateForInput(date: Date | string): string {
+    // Handle both Date objects and date strings from localStorage
+    const d = typeof date === 'string' ? new Date(date) : date;
+    
+    // Check if date is valid
+    if (isNaN(d.getTime())) {
+      console.warn('Invalid date provided to formatDateForInput:', date);
+      return '';
+    }
+    
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  get modalTitle(): string {
+    return this.editingTodo ? 'Edit Task' : 'Create New Task';
+  }
+
+  get submitButtonText(): string {
+    return this.editingTodo ? 'Update Task' : 'Create Task';
   }
 }

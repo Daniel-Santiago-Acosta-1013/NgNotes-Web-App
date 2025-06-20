@@ -9,8 +9,10 @@
   <!-- Add Task Modal -->
   <app-add-task-modal
     [isOpen]="isAddModalOpen"
+    [editingTodo]="editingTodo"
     (closeModal)="closeAddTaskModal()"
     (taskCreated)="onTaskCreated($event)"
+    (taskUpdated)="onTaskUpdated($event)"
   ></app-add-task-modal>
 
   <!-- Category Filter -->
@@ -85,7 +87,7 @@
             <div class="task-actions">
               <button 
                 class="btn-icon btn-secondary"
-                (click)="startEditing(todo.id)"
+                (click)="openEditTaskModal(todo)"
                 [attr.aria-label]="'Edit ' + todo.title"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

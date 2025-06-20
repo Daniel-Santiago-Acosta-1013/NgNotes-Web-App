@@ -16,6 +16,7 @@ export class TodoListComponent implements OnInit {
   editingTodoId: number | null = null;
   selectedCategory: string = 'all';
   isAddModalOpen = false;
+  editingTodo: Todo | null = null;
 
   categories = [
     { value: 'all', label: 'All Tasks', color: '#6366f1' },
@@ -31,11 +32,18 @@ export class TodoListComponent implements OnInit {
   }
 
   openAddTaskModal() {
+    this.editingTodo = null;
+    this.isAddModalOpen = true;
+  }
+
+  openEditTaskModal(todo: Todo) {
+    this.editingTodo = todo;
     this.isAddModalOpen = true;
   }
 
   closeAddTaskModal() {
     this.isAddModalOpen = false;
+    this.editingTodo = null;
   }
 
   onTaskCreated(todo: Todo) {
@@ -47,6 +55,22 @@ export class TodoListComponent implements OnInit {
       icon: 'success',
       title: 'Task Created!',
       text: `"${todo.title}" has been added to your tasks.`,
+      timer: 2000,
+      showConfirmButton: false,
+      toast: true,
+      position: 'top-end'
+    });
+  }
+
+  onTaskUpdated(updatedTodo: Todo) {
+    this.todoService.update(updatedTodo);
+    this.todos = this.todoService.getAll();
+    
+    // Show success feedback
+    Swal.fire({
+      icon: 'success',
+      title: 'Task Updated!',
+      text: `"${updatedTodo.title}" has been updated.`,
       timer: 2000,
       showConfirmButton: false,
       toast: true,

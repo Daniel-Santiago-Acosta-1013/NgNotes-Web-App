@@ -200,6 +200,27 @@ button {
   }
 }
 
+/* Global Icon Override for FAB */
+.fab ng-icon,
+.fab .fab-icon {
+  font-size: 40px !important;
+  width: 40px !important; 
+  height: 40px !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+@media (max-width: 768px) {
+  .fab ng-icon,
+  .fab .fab-icon {
+    font-size: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
 /* Button Variants */
 .btn-primary {
   background-color: var(--color-primary);

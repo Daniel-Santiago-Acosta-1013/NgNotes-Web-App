@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { NgIconsModule } from '@ng-icons/core';
+import { heroPlus, heroXMark, heroPencil, heroTrash, heroCheck, heroCalendar, heroFolder, heroClock } from '@ng-icons/heroicons/outline';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,7 +22,8 @@ import { ConfirmationDialog } from './components/confirmation-dialog/confirmatio
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NgIconsModule.withIcons({ heroPlus, heroXMark, heroPencil, heroTrash, heroCheck, heroCalendar, heroFolder, heroClock })
   ],
   providers: [],
   bootstrap: [AppComponent]

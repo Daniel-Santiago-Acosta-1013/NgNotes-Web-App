@@ -13,8 +13,8 @@
   position: fixed;
   bottom: var(--space-8);
   right: var(--space-8);
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: var(--radius-full);
   background: linear-gradient(135deg, var(--color-primary), var(--color-info));
   color: var(--color-white);
@@ -36,10 +36,14 @@
     transform: translateY(-1px) scale(1.02);
   }
   
-  svg {
-    width: 24px;
-    height: 24px;
-    stroke-width: 2.5;
+  ng-icon, .fab-icon {
+    color: inherit !important;
+    font-size: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 }
 
@@ -47,12 +51,13 @@
   .fab {
     bottom: var(--space-6);
     right: var(--space-6);
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     
-    svg {
-      width: 20px;
-      height: 20px;
+    ng-icon, .fab-icon {
+      font-size: 36px !important;
+      width: 36px !important;
+      height: 36px !important;
     }
   }
 }

@@ -76,4 +76,18 @@ export class NoteService {
     private saveToStorage(): void {
         localStorage.setItem('notes', JSON.stringify(this.notes));
     }
+
+    getRecent(limit: number = 5): Note[] {
+        return this.notes
+            .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+            .slice(0, limit);
+    }
+
+    getTotalCount(): number {
+        return this.notes.length;
+    }
+
+    getFavoritesCount(): number {
+        return this.notes.filter(note => note.isFavorite).length;
+    }
 }

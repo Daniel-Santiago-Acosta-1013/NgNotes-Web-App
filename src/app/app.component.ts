@@ -8,9 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'NgNotes';
-  currentView: 'tasks' | 'notes' = 'tasks';
+  currentView: 'home' | 'tasks' | 'notes' = 'home';
 
-  switchView(view: 'tasks' | 'notes'): void {
+  switchView(view: 'home' | 'tasks' | 'notes'): void {
     this.currentView = view;
   }
 }

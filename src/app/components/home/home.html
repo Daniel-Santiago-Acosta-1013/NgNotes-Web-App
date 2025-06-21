@@ -1,0 +1,158 @@
+<div class="home-container">
+  <!-- Welcome Header -->
+  <div class="welcome-section">
+    <div class="welcome-content">
+      <h1 class="welcome-title">
+        <ng-icon name="heroSun" class="welcome-icon"></ng-icon>
+        ¡Bienvenido de vuelta!
+      </h1>
+      <p class="welcome-subtitle">Aquí tienes un resumen de tu actividad reciente</p>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card todos-card">
+      <div class="stat-icon">
+        <ng-icon name="heroClipboardDocumentList"></ng-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ totalTodos }}</div>
+        <div class="stat-label">Tareas Totales</div>
+        <div class="stat-details">
+          <span class="pending-count">{{ pendingTodos }} pendientes</span>
+          <span class="overdue-count" *ngIf="overdueTodos > 0">{{ overdueTodos }} vencidas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card notes-card">
+      <div class="stat-icon">
+        <ng-icon name="heroDocumentText"></ng-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ totalNotes }}</div>
+        <div class="stat-label">Notas Totales</div>
+        <div class="stat-details">
+          <span class="favorites-count">{{ favoriteNotes }} favoritas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card productivity-card">
+      <div class="stat-icon">
+        <ng-icon name="heroChartBarSquare"></ng-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ ((totalTodos - pendingTodos) / Math.max(totalTodos, 1) * 100).toFixed(0) }}%</div>
+        <div class="stat-label">Completado</div>
+        <div class="stat-details">
+          <span>{{ totalTodos - pendingTodos }}/{{ totalTodos }} tareas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity Section -->
+  <div class="recent-section">
+    <div class="section-grid">
+      <!-- Recent Tasks -->
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <ng-icon name="heroListBullet"></ng-icon>
+            Tareas Recientes
+          </h2>
+          <button class="view-all-btn" (click)="goToTasks()">
+            Ver todas
+            <ng-icon name="heroArrowRight"></ng-icon>
+          </button>
+        </div>
+        
+        <div class="content-list" *ngIf="recentTodos.length > 0; else noTodos">
+          <div class="list-item" *ngFor="let todo of recentTodos" 
+               [class.completed]="todo.isComplete"
+               [class.overdue]="!todo.isComplete && todo.dueDate && isOverdue(todo.dueDate)"
+               [class.due-soon]="!todo.isComplete && todo.dueDate && isDueSoon(todo.dueDate)">
+            <div class="item-checkbox">
+              <ng-icon [name]="todo.isComplete ? 'heroCheckCircle' : 'heroMinus'" 
+                       [class.completed]="todo.isComplete"></ng-icon>
+            </div>
+            <div class="item-content">
+              <div class="item-title">{{ todo.title }}</div>
+              <div class="item-meta">
+                <span class="priority-badge" [ngClass]="getPriorityClass(todo.priority)">
+                  {{ todo.priority === 'high' ? 'Alta' : todo.priority === 'medium' ? 'Media' : 'Baja' }}
+                </span>
+                <span class="due-date" *ngIf="todo.dueDate">
+                  <ng-icon name="heroCalendarDays"></ng-icon>
+                  {{ formatDate(todo.dueDate) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #noTodos>
+          <div class="empty-state">
+            <ng-icon name="heroClipboardDocumentCheck" class="empty-icon"></ng-icon>
+            <p>No hay tareas recientes</p>
+            <button class="create-btn" (click)="goToTasks()">
+              <ng-icon name="heroPlus"></ng-icon>
+              Crear tarea
+            </button>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Recent Notes -->
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <ng-icon name="heroDocumentText"></ng-icon>
+            Notas Recientes
+          </h2>
+          <button class="view-all-btn" (click)="goToNotes()">
+            Ver todas
+            <ng-icon name="heroArrowRight"></ng-icon>
+          </button>
+        </div>
+        
+        <div class="content-list" *ngIf="recentNotes.length > 0; else noNotes">
+          <div class="list-item note-item" *ngFor="let note of recentNotes">
+            <div class="item-icon">
+              <ng-icon [name]="note.isFavorite ? 'heroStar' : 'heroDocumentText'" 
+                       [class.favorite]="note.isFavorite"></ng-icon>
+            </div>
+            <div class="item-content">
+              <div class="item-title">{{ note.title }}</div>
+              <div class="item-preview">{{ truncateContent(note.content) }}</div>
+              <div class="item-meta">
+                <span class="update-time">
+                  <ng-icon name="heroClock"></ng-icon>
+                  {{ formatDate(note.updatedAt) }}
+                </span>
+                <div class="note-tags" *ngIf="note.tags.length > 0">
+                  <span class="tag" *ngFor="let tag of note.tags.slice(0, 2)">{{ tag }}</span>
+                  <span class="tag-more" *ngIf="note.tags.length > 2">+{{ note.tags.length - 2 }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #noNotes>
+          <div class="empty-state">
+            <ng-icon name="heroDocumentPlus" class="empty-icon"></ng-icon>
+            <p>No hay notas recientes</p>
+            <button class="create-btn" (click)="goToNotes()">
+              <ng-icon name="heroPlus"></ng-icon>
+              Crear nota
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+</div>

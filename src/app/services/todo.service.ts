@@ -45,6 +45,12 @@ export class TodoService {
         return this.todos.filter(todo => todo.category === category);
     }
 
+    getRecent(limit: number = 5): Todo[] {
+        return this.todos
+            .sort((a, b) => b.id - a.id)
+            .slice(0, limit);
+    }
+
     update(updatedTodo: Todo) {
         const index = this.todos.findIndex(todo => todo.id === updatedTodo.id);
         if (index !== -1) {
@@ -65,5 +71,19 @@ export class TodoService {
 
     private saveToStorage() {
         localStorage.setItem('todos', JSON.stringify(this.todos));
+    }
+
+    getPendingCount(): number {
+        return this.todos.filter(todo => !todo.isComplete).length;
+    }
+
+    getOverdueCount(): number {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return this.todos.filter(todo => 
+            !todo.isComplete && 
+            todo.dueDate && 
+            new Date(todo.dueDate) < today
+        ).length;
     }
 }

@@ -2,10 +2,22 @@
   <header class="app-header">
     <div class="container">
       <h1 class="app-title">{{ title }}</h1>
-      <p class="app-subtitle">{{ currentView === 'tasks' ? 'Organize your tasks with style and simplicity' : 'Capture your thoughts and ideas' }}</p>
+      <p class="app-subtitle">
+        {{ currentView === 'home' ? 'Tu espacio personal de productividad' : 
+           currentView === 'tasks' ? 'Organize your tasks with style and simplicity' : 
+           'Capture your thoughts and ideas' }}
+      </p>
       
       <!-- Navigation Tabs -->
       <nav class="nav-tabs">
+        <button 
+          class="nav-tab"
+          [class.active]="currentView === 'home'"
+          (click)="switchView('home')"
+        >
+          <ng-icon name="heroSun" size="18"></ng-icon>
+          Home
+        </button>
         <button 
           class="nav-tab"
           [class.active]="currentView === 'tasks'"
@@ -27,9 +39,12 @@
   </header>
   
   <main class="app-main">
-    <div class="container">
+    <div class="container" *ngIf="currentView !== 'home'">
       <app-todo-list *ngIf="currentView === 'tasks'"></app-todo-list>
       <app-note-list *ngIf="currentView === 'notes'"></app-note-list>
     </div>
+    <app-home *ngIf="currentView === 'home'" (navigationChange)="switchView($event)"></app-home>
   </main>
+  
+  <app-footer></app-footer>
 </div>

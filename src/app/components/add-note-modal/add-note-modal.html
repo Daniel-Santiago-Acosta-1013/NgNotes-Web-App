@@ -1,0 +1,116 @@
+<app-modal 
+  [isOpen]="isOpen"
+  [title]="modalTitle"
+  size="xl"
+  (closeModal)="close()"
+>
+  <form class="add-note-form" (ngSubmit)="onSubmit()" #noteForm="ngForm">
+    <!-- Note Title -->
+    <div class="form-group">
+      <label for="noteTitle" class="form-label required">
+        <ng-icon name="heroDocumentText" size="16"></ng-icon>
+        Note Title
+      </label>
+      <input 
+        id="noteTitle"
+        type="text" 
+        [(ngModel)]="newNoteTitle" 
+        name="noteTitle"
+        class="form-input" 
+        placeholder="Enter note title..."
+        required
+        maxlength="100"
+        #titleInput
+      />
+      <div class="input-hint">
+        {{ newNoteTitle.length }}/100 characters
+      </div>
+    </div>
+
+    <!-- Category Selection -->
+    <div class="form-group">
+      <label class="form-label">
+        <ng-icon name="heroFolder" size="16"></ng-icon>
+        Category
+      </label>
+      <div class="selection-grid">
+        <button
+          type="button"
+          *ngFor="let category of categories"
+          class="selection-item"
+          [class.selected]="newNoteCategory === category.value"
+          (click)="setCategory(category.value)"
+        >
+          <div class="selection-icon" [style.background-color]="category.color">
+            {{ category.icon }}
+          </div>
+          <div class="selection-content">
+            <div class="selection-title">{{ category.label }}</div>
+            <div class="selection-description">{{ category.value }}</div>
+          </div>
+          <div class="selection-check" *ngIf="newNoteCategory === category.value">
+            <ng-icon name="heroCheck" size="16"></ng-icon>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Note Content - NgxEditor Rich Text Editor -->
+    <div class="form-group">
+      <label class="form-label required">
+        <ng-icon name="heroPencil" size="16"></ng-icon>
+        Content
+      </label>
+      <div class="editor-container">
+        <!-- NgxEditor Menu -->
+        <ngx-editor-menu 
+          [editor]="editor" 
+          [toolbar]="toolbar"
+          class="editor-menu">
+        </ngx-editor-menu>
+        
+        <!-- NgxEditor -->
+        <ngx-editor 
+          [editor]="editor" 
+          [(ngModel)]="html"
+          name="noteContent"
+          placeholder="Write your note here..."
+          height="400px"
+          minHeight="400px"
+          class="ngx-editor">
+        </ngx-editor>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="form-group">
+      <label for="noteTags" class="form-label">
+        <ng-icon name="heroHashtag" size="16"></ng-icon>
+        Tags
+      </label>
+      <input 
+        id="noteTags"
+        type="text" 
+        [(ngModel)]="newNoteTags" 
+        name="noteTags"
+        class="form-input" 
+        placeholder="Enter tags separated by commas..."
+      />
+      <div class="input-hint">
+        Add tags to organize your notes (e.g., personal, important, ideas)
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="close()">
+        <ng-icon name="heroXMark" size="16"></ng-icon>
+        Cancel
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="!noteForm.valid || !newNoteTitle.trim()">
+        <ng-icon name="heroCheck" size="16"></ng-icon>
+        {{ submitButtonText }}
+      </button>
+    </div>
+  </form>
+</app-modal>

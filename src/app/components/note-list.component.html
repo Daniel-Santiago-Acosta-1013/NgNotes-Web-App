@@ -1,0 +1,172 @@
+<div class="note-container">
+  <!-- Floating Action Button -->
+  <button class="fab" (click)="openAddNoteModal()" [attr.aria-label]="'Add new note'">
+    <ng-icon name="heroPlus" size="40" class="fab-icon"></ng-icon>
+  </button>
+
+  <!-- Add Note Modal -->
+  <app-add-note-modal
+    [isOpen]="isAddModalOpen"
+    [editingNote]="editingNote"
+    (closeModal)="closeAddNoteModal()"
+    (noteCreated)="onNoteCreated($event)"
+    (noteUpdated)="onNoteUpdated($event)"
+  ></app-add-note-modal>
+
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content">
+      <h1 class="page-title">Notes</h1>
+      <div class="header-actions">
+        <!-- Search Bar -->
+        <div class="search-container">
+          <ng-icon name="heroMagnifyingGlass" class="search-icon"></ng-icon>
+          <input 
+            type="text" 
+            placeholder="Search notes..." 
+            class="search-input"
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+          />
+        </div>
+        
+        <!-- View Toggle -->
+        <button 
+          class="view-toggle btn-icon btn-secondary"
+          (click)="toggleViewMode()"
+          [attr.aria-label]="viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'"
+        >
+          <ng-icon [name]="viewMode === 'grid' ? 'heroListBullet' : 'heroSquares2x2'" size="20"></ng-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="filter-section">
+    <div class="filter-header">
+      <h3 class="filter-title">Filter Notes</h3>
+      <div class="notes-count">{{ notes.length }} notes</div>
+    </div>
+    
+    <div class="category-filter">
+      <button 
+        *ngFor="let category of categories" 
+        class="filter-btn"
+        [class.active]="selectedCategory === category.value"
+        (click)="setFilter(category.value)"
+      >
+        <span class="filter-icon" [style.background-color]="category.color"></span>
+        {{ category.label }}
+      </button>
+      
+      <button 
+        class="filter-btn"
+        [class.active]="selectedCategory === 'favorites'"
+        (click)="setFilter('favorites')"
+      >
+        <span class="filter-icon" style="background-color: #f59e0b;">⭐</span>
+        Favorites
+      </button>
+    </div>
+  </div>
+
+  <!-- Notes Section -->
+  <div class="notes-section">
+    <div class="notes-header" *ngIf="notes.length > 0">
+      <h3 class="notes-title">
+        {{ selectedCategory === 'all' ? 'All Notes' : 
+           selectedCategory === 'favorites' ? 'Favorite Notes' : 
+           getCategoryLabel(selectedCategory) }}
+      </h3>
+    </div>
+    
+    <div class="notes-list" [class.grid-view]="viewMode === 'grid'" [class.list-view]="viewMode === 'list'" *ngIf="notes.length > 0; else emptyState">
+      <div 
+        *ngFor="let note of notes; trackBy: trackByNote" 
+        class="note-card card fade-in"
+        [class.note-favorite]="note.isFavorite"
+      >
+        <!-- List View Template -->
+        <div class="note-content" *ngIf="viewMode === 'list'" (click)="openEditNoteModal(note)">
+          <div class="note-header">
+            <h4 class="note-title">{{ note.title }}</h4>
+            <div class="note-meta">
+              <span class="note-category" [attr.data-category]="note.category">
+                {{ note.category }}
+              </span>
+              <span class="note-date">
+                {{ formatDate(note.updatedAt) }}
+              </span>
+            </div>
+          </div>
+          <div class="note-preview" [innerHTML]="getPreviewText(note.content)"></div>
+          <div class="note-tags" *ngIf="note.tags.length > 0">
+            <span *ngFor="let tag of note.tags" class="tag">{{ tag }}</span>
+          </div>
+        </div>
+
+        <!-- Grid View Template -->
+        <div class="note-content grid-content" *ngIf="viewMode === 'grid'" (click)="openEditNoteModal(note)">
+          <div class="note-header">
+            <h4 class="note-title">{{ note.title }}</h4>
+            <span class="note-date">{{ formatDate(note.updatedAt) }}</span>
+          </div>
+          <div class="note-preview" [innerHTML]="getPreviewText(note.content)"></div>
+          <div class="note-footer">
+            <span class="note-category small" [attr.data-category]="note.category">
+              {{ note.category }}
+            </span>
+            <div class="note-tags" *ngIf="note.tags.length > 0">
+              <span *ngFor="let tag of note.tags.slice(0, 2)" class="tag small">{{ tag }}</span>
+              <span *ngIf="note.tags.length > 2" class="tag small">+{{ note.tags.length - 2 }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="note-actions">
+          <button 
+            class="btn-icon btn-warning"
+            (click)="toggleFavorite(note.id)"
+            [attr.aria-label]="note.isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+          >
+            <ng-icon [name]="note.isFavorite ? 'heroStarSolid' : 'heroStar'" size="16"></ng-icon>
+          </button>
+          
+          <button 
+            class="btn-icon btn-secondary"
+            (click)="openEditNoteModal(note)"
+            [attr.aria-label]="'Edit ' + note.title"
+          >
+            <ng-icon name="heroPencil" size="16"></ng-icon>
+          </button>
+          
+          <button 
+            class="btn-icon btn-danger"
+            (click)="deleteNote(note.id)"
+            [attr.aria-label]="'Delete ' + note.title"
+          >
+            <ng-icon name="heroTrash" size="16"></ng-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Empty State -->
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <ng-icon name="heroDocumentText" size="64"></ng-icon>
+        </div>
+        <h3 class="empty-state-title">No notes found</h3>
+        <p class="empty-state-description">
+          {{ searchQuery ? 'Try adjusting your search terms.' : 'Create your first note to get started!' }}
+        </p>
+        <button class="btn-primary" (click)="openAddNoteModal()" *ngIf="!searchQuery">
+          <ng-icon name="heroPlus" size="16"></ng-icon>
+          Create Note
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>

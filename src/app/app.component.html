@@ -2,13 +2,34 @@
   <header class="app-header">
     <div class="container">
       <h1 class="app-title">{{ title }}</h1>
-      <p class="app-subtitle">Organize your tasks with style and simplicity</p>
+      <p class="app-subtitle">{{ currentView === 'tasks' ? 'Organize your tasks with style and simplicity' : 'Capture your thoughts and ideas' }}</p>
+      
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button 
+          class="nav-tab"
+          [class.active]="currentView === 'tasks'"
+          (click)="switchView('tasks')"
+        >
+          <ng-icon name="heroCheck" size="18"></ng-icon>
+          Tasks
+        </button>
+        <button 
+          class="nav-tab"
+          [class.active]="currentView === 'notes'"
+          (click)="switchView('notes')"
+        >
+          <ng-icon name="heroDocumentText" size="18"></ng-icon>
+          Notes
+        </button>
+      </nav>
     </div>
   </header>
   
   <main class="app-main">
     <div class="container">
-      <app-todo-list></app-todo-list>
+      <app-todo-list *ngIf="currentView === 'tasks'"></app-todo-list>
+      <app-note-list *ngIf="currentView === 'notes'"></app-note-list>
     </div>
   </main>
 </div>
